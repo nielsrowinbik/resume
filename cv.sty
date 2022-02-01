@@ -1,0 +1,65 @@
+\RequirePackage{ifpdf,ifxetex,ifluatex}
+\ifpdf
+  \RequirePackage{cmap}
+  \RequirePackage[utf8]{inputenc}
+  \RequirePackage[T1]{fontenc}
+  \input{glyphtounicode}
+  \pdfglyphtounicode{f_f}{FB00}
+  \pdfglyphtounicode{f_f_i}{FB03}
+  \pdfglyphtounicode{f_f_l}{FB04}
+  \pdfglyphtounicode{f_i}{FB01}
+  \pdfgentounicode=1
+\fi
+
+\RequirePackage[a4paper, top=1cm, bottom=1cm, left=1cm, right=1cm]{geometry}
+\RequirePackage{parskip}
+\RequirePackage{enumitem}
+\RequirePackage{textcase}
+\RequirePackage{xparse}
+\RequirePackage{needspace}
+\RequirePackage[compact,small,explicit]{titlesec}
+\RequirePackage[draft=false]{hyperref}
+\RequirePackage{titlesec}
+
+\titlespacing*{\section}
+  {0pt}{1.5\baselineskip}{0.5\baselineskip}
+
+\newcommand{\link}[1]{{\href{#1}{#1}}}
+\newcommand{\mailto}[1]{{\href{mailto:#1}{#1}}}
+\newcommand{\doi}[1]{{\href{https://doi.org/#1}{Doi #1}}}
+
+\def\scimisc@cvname{}
+\def\scimisc@cvpersonalinfo{}
+\def\cvinfosep{\hfill|\hfill{}}
+
+\newcommand{\cvname}[1]{\def\scimisc@cvname{#1}}
+\newcommand{\cvpersonalinfo}[1]{\def\scimisc@cvpersonalinfo{#1}}
+
+\newcommand{\cvtitlefamily}{\rmfamily}
+\newcommand{\cvnamefont}{\cvtitlefamily\huge\bfseries}
+\newcommand{\cvpersonalinfofont}{\normalsize}
+
+\newcommand{\makecvtitle}{%
+  \begin{center}
+      {\cvnamefont\MakeTextUppercase{\scimisc@cvname}\par}
+      {\cvpersonalinfofont\scimisc@cvpersonalinfo\par}
+  \end{center}\medskip
+}
+
+\NewDocumentCommand{\cvsubsection}{m o o o}{%
+    \vspace{0.5\baselineskip}
+    \needspace{4\baselineskip}%
+    \textbf{#1}%
+    \IfValueT{#3}{\hfill\textbf{#3}}%
+    \IfValueT{#2}{\IfValueT{#3}{\\}}%
+    \IfValueT{#2}{\textbf{\textit{#2}}}%
+    \IfValueT{#3}{\hfill\textbf{#4}}
+}
+
+\titleformat{\section}
+  {\centering\bfseries\rmfamily\large}{\thesection}{0pt}{\MakeTextUppercase{#1}}[{}]
+
+\setlist{leftmargin=*,nosep}
+
+\pagestyle{empty}
+\setcounter{secnumdepth}{0}
