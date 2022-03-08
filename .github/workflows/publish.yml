@@ -2,9 +2,9 @@ name: 🚀 Publish new resume version
 on:
   push:
     branches:
-      - master
+      - main
     paths:
-      - '*.tex'
+      - "*.tex"
   workflow_dispatch:
 
 jobs:
@@ -13,13 +13,13 @@ jobs:
     steps:
       - name: 🔃 Checkout
         uses: actions/checkout@v2
-        
+
       - name: ⏰ Get current time
         id: current-time
         uses: 1466587594/get-current-time@v2
         with:
           format: DD-MM-YYYY
-          
+
       - name: ⚙️ Check tag exists
         id: check_tag
         uses: mukunku/tag-exists-action@v1.0.0
@@ -35,14 +35,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: ${{ steps.current-time.outputs.formattedTime }}
-          
+
       - name: 🛠️Compile
         uses: xu-cheng/latex-action@v2
         with:
           root_file: |
             en.tex
             nl.tex
-            
+
       - name: 🛎️ Create release
         uses: ncipollo/release-action@v1
         with:
