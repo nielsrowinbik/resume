@@ -41,7 +41,6 @@ jobs:
         with:
           root_file: |
             en.tex
-            nl.tex
 
       - name: 🛎️ Create release
         uses: ncipollo/release-action@v1
