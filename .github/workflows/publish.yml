@@ -47,7 +47,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: en.pdf,nl.pdf
+          artifacts: en.pdf
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.current-time.outputs.formattedTime }}
           prerelease: false
