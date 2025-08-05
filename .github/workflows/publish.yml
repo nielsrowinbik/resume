@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - "*.tex"
+      - "*.sty"
   workflow_dispatch:
 
 jobs:
@@ -13,6 +14,8 @@ jobs:
     steps:
       - name: 🔃 Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
       - name: ⏰ Get current time
         id: current-time
@@ -36,17 +39,31 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: ${{ steps.current-time.outputs.formattedTime }}
 
-      - name: 🛠️Compile
+      - name: 📄 Get changed .tex files
+        id: changed-tex-files
+        uses: tj-actions/changed-files@ed68ef82c095e0d48ec87eccea555d944a631a4c # v46
+        with:
+          files: "**.tex"
+          separator: "\n"
+
+      - name: 🛠️ Compile
+        if: steps.changed-tex-files.outputs.any_changed == 'true'
         uses: xu-cheng/latex-action@v2
         with:
-          root_file: |
-            en.tex
+          root_file: ${{ steps.changed-tex-files.outputs.all_changed_files }}
+
+      - name: 📄 Get changed .pdf files
+        id: changed-pdf-files
+        uses: tj-actions/verify-changed-files@a1c6acee9df209257a246f2cc6ae8cb6581c1edf # v20
+        with:
+          files: "**.pdf"
+          separator: ","
 
       - name: 🛎️ Create release
         uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
-          artifacts: en.pdf
+          artifacts: ${{ steps.changed-pdf-files.outputs.changed_files }}
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ steps.current-time.outputs.formattedTime }}
           prerelease: false
